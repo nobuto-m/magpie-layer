@@ -70,12 +70,13 @@ def listen_for_checks(magpie):
     set_state('iperf.listening')
 
 
-@when('iperf.servers.ready', 'magpie.joined', 'leadership.is_leader')
+# @when('iperf.servers.ready', 'magpie.joined', 'leadership.is_leader')
+@when('magpie.joined', 'leadership.is_leader')
 def client_check_hosts(magpie):
     '''
     Once the iperf servers are listening, do the checks
     '''
-    nodes = magpie.get_nodes()
+    nodes = magpie.check_ready_iperf_servers()
     _set_states(check_nodes(nodes, iperf_client=True))
     magpie.set_iperf_checked()
 
