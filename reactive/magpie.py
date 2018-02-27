@@ -33,6 +33,7 @@ def check_check_state(magpie):
     '''
     Servers should only update their status after iperf has checked them
     '''
+    safe_status('waiting', 'Waiting for iperf check...')
     if (magpie.get_iperf_checked() is not None) and \
             (hookenv.local_unit() in magpie.get_iperf_checked()):
         set_state('iperf.checked')
