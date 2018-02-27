@@ -46,10 +46,14 @@ def leader_wait_servers_ready(magpie):
     Don't do any iperf checks until the servers are listening
     '''
     nodes = sorted(magpie.get_nodes())
+    hookenv.log('NODES: {}'.format(nodes))
     iperf_ready_nodes = sorted(magpie.check_ready_iperf_servers())
+    hookenv.log('IPERF_READY_NODES: {}'.format(iperf_ready_nodes))
     if nodes == iperf_ready_nodes:
+        hookenv.log('NODES == IPERF_READY_NODES')
         set_state('iperf.servers.ready')
     else:
+        hookenv.log('NODES != IPERF_READY_NODES')
         remove_state('iperf.servers.ready')
 
 
@@ -59,6 +63,7 @@ def listen_for_checks(magpie):
     '''
     If im not the leader, and im not listening, then listen
     '''
+    safe_status('maintenance', 'Starting iperf server...')
     iperf = Iperf()
     iperf.listen()
     magpie.set_iperf_server_ready()
